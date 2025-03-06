@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -10,11 +11,30 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] GameObject panelGameStart;
     [SerializeField] GameObject panelGameLevel;
 
+    [SerializeField] GameObject panelLoading1;
+    [SerializeField] GameObject panelLoading2;
+
     [SerializeField] CanvasGroup gamePlayCG;
     [SerializeField] CanvasGroup gameFinishCG;
     [SerializeField] CanvasGroup gameStartCG;
     [SerializeField] CanvasGroup gameLevelCG;
 
+    public PanelGameLevel gameLevel;
+    public PanelGameFinish gameFinish;
+
+    private void Start()
+    {
+        Init();
+    }
+    void Init()
+    {
+        panelGamePlay.SetActive(false);
+        panelGameFinish.SetActive(false);
+        panelGameStart.SetActive(true);
+        panelGameLevel.SetActive(false);
+        panelLoading1.SetActive(false);
+        panelLoading2.SetActive(false);
+    }
     public void OnEnablePanelGamePlay()
     {
         AnimFadeIn(panelGamePlay, gamePlayCG);
@@ -27,6 +47,7 @@ public class UIManager : Singleton<UIManager>
     {
         AnimPlayerUI.Instance.AnimDead(true);
         AnimFadeIn(panelGameFinish, gameFinishCG);
+        gameFinish.ChangeTextFinish();
     }
     public void OnDisablePanelGameFinish()
     {
@@ -50,7 +71,22 @@ public class UIManager : Singleton<UIManager>
         AnimFadeOut(panelGameLevel, gameLevelCG);
     }
 
-
+    public void AnimLoading1()
+    {
+        panelLoading1.SetActive(true);
+        DOVirtual.DelayedCall(1f, () =>
+        {
+            panelLoading1.SetActive(false);
+        });
+    }
+    public void AnimLoading2()
+    {
+        panelLoading2.SetActive(true);
+        DOVirtual.DelayedCall(0.5f, () =>
+        {
+            panelLoading2.SetActive(false);
+        });
+    }
     void AnimFadeIn(GameObject panel, CanvasGroup panelCG)
     {
         panel.SetActive(true);
@@ -66,5 +102,16 @@ public class UIManager : Singleton<UIManager>
                 panel.SetActive(false);
                 AnimPlayerUI.Instance.AnimDead(false);
             });
+    }
+    public void SelectLevel()
+    {
+        AnimLoading2();
+        gameFinish.ChangeTextFinish();
+        OnDisablePanelGameLevel();
+        OnEnablePanelGamePlay();
+    }
+    public void ChangeImageButtonLevel(int index, bool on)
+    {
+        gameLevel.ChangeImageButton(index, on);
     }
 }

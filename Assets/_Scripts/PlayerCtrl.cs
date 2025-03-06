@@ -37,18 +37,34 @@ public class PlayerCtrl : Singleton<PlayerCtrl>
     {
         if (isDead) return;
         if (isComplete) return;
+        CheckDead();
+        CheckInput();
+        CheckGround();
+        PlayerMove();
+        JumpOnPC();
+    }
+    void CheckDead()
+    {
         if (transform.position.y < -0.5f)
         {
             playerAnimation.AnimDead();
             Invoke("ShowFinishPanel", 2f);
+            GameManager.Instance.iq--;
             isDead = true;
             return;
         }
-        PcMoveInput();
-        //JoystickMoveInput();
-        CheckGround();
-        PlayerMove();
-        JumpOnPC();
+    }
+    void CheckInput()
+    {
+        if (GameManager.Instance.playOnMobile)
+        {
+            JoystickMoveInput();
+        }
+        else
+        {
+            PcMoveInput();
+        }
+
     }
     void PcMoveInput()
     {
@@ -94,11 +110,6 @@ public class PlayerCtrl : Singleton<PlayerCtrl>
     }
     void PlayerMove()
     {
-        //if(!UIManager.instance.playerMaybeMove)
-        //{
-        //    PlayerAnimation.instance.SetIsRunFalse();
-        //    return;
-        //}
         isReset = false;
         Vector3 movement1 = Vector3.forward * pressVertical;
         Vector3 movement2 = Vector3.right * pressHorizontal;
@@ -121,26 +132,30 @@ public class PlayerCtrl : Singleton<PlayerCtrl>
         if (other.transform.tag == "Target")
         {
             isComplete = true;
-            transform.DORotate(other.transform.forward, 1f)
+            transform.DORotate(other.transform.forward, 0.5f)
                 .SetUpdate(UpdateType.Normal, true)
                 .OnComplete(() =>
                 {
-                    transform.DOMove(other.transform.position + 3 * other.transform.forward, 1.5f)
+                    UIManager.Instance.AnimLoading1();
+                    transform.DOMove(other.transform.position + 2 * other.transform.forward, 1f)
                         .SetUpdate(UpdateType.Normal, true)
-                        .OnComplete(ResetPlayer);
+                        .OnComplete(GameManager.Instance.NextLevel);
                 });
         }
     }
     void ShowFinishPanel()
     {
-        UIManager.Instance.OnEnablePanelGameFinish();
-    }
+        GameManager.Instance.ShowPanelFinish();
+    }    
     public void ResetPlayer()
     {
         isDead = false;
         isComplete = false;
         transform.position = Vector3.zero;
         isReset = true;
+    }
+    public void ResetAnimPlayer()
+    {
         playerAnimation.ExitAnim();
     }
 } 

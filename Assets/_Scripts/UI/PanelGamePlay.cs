@@ -11,10 +11,6 @@ public class PanelGamePlay : MonoBehaviour
     {
         homeButton.onClick.AddListener(ClickHomeButton);
     }
-    public void ClickJumpButton()
-    {
-        PlayerCtrl.Instance.JumpOnMoblie();
-    }
     void ClickHomeButton()
     {
         UIManager.Instance.OnEnablePanelGameLevel();

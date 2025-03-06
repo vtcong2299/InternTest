@@ -5,18 +5,17 @@ using DG.Tweening;
 
 public class GroundTrap : MonoBehaviour
 {
-    [SerializeField] float oldPosY;
-    [SerializeField] float newPosY;
+    [SerializeField] Vector3 oldPos;
+    [SerializeField] Vector3 newPos;
+    [SerializeField] float time = 0.3f;
     void Start()
     {
-        oldPosY = transform.position.y;
+        oldPos = transform.position;
     }
     private void Update()
     {
-        if (!PlayerCtrl.Instance.isReset) return;
-        Vector3 pos = transform.position;   
-        pos.y = oldPosY;
-        transform.position = pos;
+        if (!PlayerCtrl.Instance.isReset) return;        
+        transform.position = oldPos;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -27,7 +26,7 @@ public class GroundTrap : MonoBehaviour
     }
     void TrapMove()
     {
-        transform.DOLocalMoveY(newPosY, 0.5f)
+        transform.DOLocalMove(newPos, time)
             .SetEase(Ease.Linear);
     }    
 }
