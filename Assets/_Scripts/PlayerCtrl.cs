@@ -64,7 +64,6 @@ public class PlayerCtrl : Singleton<PlayerCtrl>
         {
             PcMoveInput();
         }
-
     }
     void PcMoveInput()
     {

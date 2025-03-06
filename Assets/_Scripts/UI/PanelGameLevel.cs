@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +15,7 @@ public class PanelGameLevel : MonoBehaviour
         levelButtons[0].onClick.AddListener(PressLevel1);
         levelButtons[1].onClick.AddListener(PressLevel2);
         levelButtons[2].onClick.AddListener(PressLevel3);
+        levelButtons[3].onClick.AddListener(PressLevel4);
     }
     private void OnEnable()
     {
@@ -38,6 +37,10 @@ public class PanelGameLevel : MonoBehaviour
     public void PressLevel3()
     {
         GameManager.Instance.SelectLevel(3);
+    }
+    public void PressLevel4()
+    {
+        GameManager.Instance.SelectLevel(4);
     }
     public void ChangeImageButton(int index, bool on)
     {

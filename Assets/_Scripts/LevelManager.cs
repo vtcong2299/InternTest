@@ -79,6 +79,9 @@ public class LevelManager : Singleton<LevelManager>
                 break;
             }
         }
-
+    }
+    private void OnDrawGizmosSelected()
+    {
+        configMap = Resources.LoadAll<ConfigMap>("_Config");
     }
 }
