@@ -16,16 +16,13 @@ public class PlayerAnimation : MonoBehaviour
     public void AnimRun()
     {
         animator.SetBool(stateRun, true);
-        animator.SetBool(stateInGround, true);
     }
-    public void AnimJump()
+    public void AnimJump(bool state)
     {
-        animator.SetTrigger(stateJump);
-        animator.SetBool(stateInGround, true) ;
+        animator.SetBool(stateJump, state);
     }
     public void AnimIdle()
     {
-        animator.SetBool(stateInGround, true);
         animator.SetBool(stateRun, false);        
     }
     public void AnimDead()
@@ -35,5 +32,9 @@ public class PlayerAnimation : MonoBehaviour
     public void ExitAnim()
     {
         animator.SetTrigger(exitAnim);
+    }
+    public void SetStateInGround(bool state)
+    {
+        animator.SetBool(stateInGround, state);
     }
 }

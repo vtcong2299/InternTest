@@ -64,7 +64,6 @@ public class PlayerCtrl : Singleton<PlayerCtrl>
     {
         RaycastHit hit;
         Physics.Raycast(transform.position + offsetRaycast, Vector3.down, out hit, lengRaycast, groundLayer);
-        Debug.DrawRay(transform.position + offsetRaycast, Vector3.down * lengRaycast, Color.red);
 
         if (hit.collider)
         {
@@ -72,14 +71,16 @@ public class PlayerCtrl : Singleton<PlayerCtrl>
         }
         else
         {
+            playerAnimation.AnimJump(false);
             inGround = false;
         }
+        playerAnimation.SetStateInGround(inGround);
     }
     void JumpOnPC()
     {
         if (Input.GetKeyDown(KeyCode.Space) && inGround)
         {
-            playerAnimation.AnimJump();
+            playerAnimation.AnimJump(true);
             rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
         }
     }
@@ -87,7 +88,7 @@ public class PlayerCtrl : Singleton<PlayerCtrl>
     {
         if (inGround)
         {
-            playerAnimation.AnimJump();
+            playerAnimation.AnimJump(true);
             rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
         }
     }
